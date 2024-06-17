@@ -1,14 +1,14 @@
-<?php
-session_start();
+     <?php
+     session_start();
 
-$featuredProducts = [
-    ['id' => 1, 'name' => 'Treadmill', 'image' => 'product1.jpg', 'description' => 'Top-quality treadmill for cardio workouts.', 'price' => 199.99],
-    ['id' => 2, 'name' => 'Dumbbell Set', 'image' => 'product2.jpg', 'description' => 'Complete dumbbell set for strength training.', 'price' => 299.99],
-    ['id' => 3, 'name' => 'Exercise Bike', 'image' => 'product3.jpg', 'description' => 'Indoor exercise bike with adjustable settings.', 'price' => 399.99],
-    ['id' => 4, 'name' => 'Yoga Mat', 'image' => 'product4.jpg', 'description' => 'Premium yoga mat for flexibility and comfort.', 'price' => 19.99],
-    ['id' => 5, 'name' => 'Weight Bench', 'image' => 'product5.jpg', 'description' => 'Versatile weight bench for various exercises.', 'price' => 499.99],
-    ['id' => 6, 'name' => 'Resistance Bands', 'image' => 'product6.jpg', 'description' => 'Set of resistance bands for full-body workouts.', 'price' => 29.99],
-];
+     $featuredProducts = [
+         ['id' => 1, 'name' => 'Treadmill', 'image' => 'product1.jpg', 'description' => 'Top-quality treadmill for cardio workouts.', 'price' => 199.99],
+         ['id' => 2, 'name' => 'Dumbbell Set', 'image' => 'product2.jpg', 'description' => 'Complete dumbbell set for strength training.', 'price' => 299.99],
+         ['id' => 3, 'name' => 'Exercise Bike', 'image' => 'product3.jpg', 'description' => 'Indoor exercise bike with adjustable settings.', 'price' => 399.99],
+         ['id' => 4, 'name' => 'Yoga Mat', 'image' => 'product4.jpg', 'description' => 'Premium yoga mat for flexibility and comfort.', 'price' => 19.99],
+         ['id' => 5, 'name' => 'Weight Bench', 'image' => 'product5.jpg', 'description' => 'Versatile weight bench for various exercises.', 'price' => 499.99],
+         ['id' => 6, 'name' => 'Resistance Bands', 'image' => 'product6.jpg', 'description' => 'Set of resistance bands for full-body workouts.', 'price' => 29.99],
+     ];
 
 $testimonials = [
     ['name' => 'John Doe', 'content' => 'The equipment from Fitness Overload transformed my workouts!'],
