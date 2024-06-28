@@ -1,28 +1,11 @@
-     <?php
-     session_start();
+<?php
+session_start();
 
-     $featuredProducts = [
-         ['id' => 1, 'name' => 'Treadmill', 'image' => 'product1.jpg', 'description' => 'Top-quality treadmill for cardio workouts.', 'price' => 199.99],
-         ['id' => 2, 'name' => 'Dumbbell Set', 'image' => 'product2.jpg', 'description' => 'Complete dumbbell set for strength training.', 'price' => 299.99],
-         ['id' => 3, 'name' => 'Exercise Bike', 'image' => 'product3.jpg', 'description' => 'Indoor exercise bike with adjustable settings.', 'price' => 399.99],
-         ['id' => 4, 'name' => 'Yoga Mat', 'image' => 'product4.jpg', 'description' => 'Premium yoga mat for flexibility and comfort.', 'price' => 19.99],
-         ['id' => 5, 'name' => 'Weight Bench', 'image' => 'product5.jpg', 'description' => 'Versatile weight bench for various exercises.', 'price' => 499.99],
-         ['id' => 6, 'name' => 'Resistance Bands', 'image' => 'product6.jpg', 'description' => 'Set of resistance bands for full-body workouts.', 'price' => 29.99],
-     ];
-
-$testimonials = [
-    ['name' => 'John Doe', 'content' => 'The equipment from Fitness Overload transformed my workouts!'],
-    ['name' => 'Jane Smith', 'content' => 'Excellent customer service and high-quality products. Highly recommended!'],
-    ['name' => 'Michael Brown', 'content' => 'Fast shipping and great prices. Will shop here again!'],
-];
-
-$services = [
-    ['title' => 'Personal Training', 'description' => 'Tailored fitness programs with certified trainers.'],
-    ['title' => 'Equipment Installation', 'description' => 'Professional installation services for gym equipment.'],
-    ['title' => 'Fitness Assessments', 'description' => 'Comprehensive assessments to track your fitness progress.'],
-    ['title' => 'Nutritional Consultations', 'description' => 'Nutrition plans customized to complement your workout regimen.'],
-    ['title' => 'Equipment Maintenance', 'description' => 'Scheduled maintenance to keep your gym equipment in top condition.'],
-];
+// Check if user is logged in, redirect if not
+if (!isset($_SESSION['name'])) {
+    header('Location: login.php');
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,11 +13,11 @@ $services = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Overload</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Fitness Overload Equipment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Additional CSS styles can go here if needed */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -42,312 +25,350 @@ $services = [
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
+            font-family: 'Roboto', sans-serif;
             line-height: 1.6;
+            color: #333;
+            background-color: #f0f0f0;
         }
 
         .navbar {
-            background-color: #333;
+            background-color: #1a1a1a;
             color: #fff;
-            padding: 10px 20px;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo a {
-            font-size: 24px;
-            font-weight: bold;
             color: #fff;
             text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .nav-menu {
-            list-style: none;
-            margin: 0;
-            padding: 0;
             display: flex;
+            list-style: none;
         }
 
         .nav-menu li {
-            position: relative;
+            margin-left: 1.5rem;
         }
 
-        .nav-menu li a {
-            display: block;
-            padding: 10px 15px;
+        .nav-menu a {
             color: #fff;
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: #333;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
+        .nav-menu a:hover {
+            color: #ff6b6b;
         }
 
         .logout-btn {
-            background-color: #ff6347;
+            background-color: #ff6b6b;
             color: #fff;
-            padding: 8px 16px;
+            padding: 0.5rem 1rem;
+            border: none;
             border-radius: 4px;
-            text-decoration: none;
+            cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .logout-btn:hover {
-            background-color: #e65c4f;
+            background-color: #ff4757;
         }
 
         .hero {
-            background-color: #333;
-            color: #fff;
-            padding: 100px 20px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('gym-equipment.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
         }
 
         .hero h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .hero p {
-            font-size: 18px;
-            margin-bottom: 30px;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
         }
 
-        .featured-products {
-            padding: 50px 20px;
-            text-align: center;
+        .cta-button {
+            background-color: #ff6b6b;
+            color: #fff;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .featured-products h2 {
-            font-size: 28px;
-            margin-bottom: 30px;
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4);
         }
 
-        .product-grid {
+        .features {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .product-item {
-            max-width: 300px;
-            margin: 20px;
+            justify-content: space-around;
+            padding: 4rem 2rem;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .product-item:hover {
+        .feature {
+            text-align: center;
+            max-width: 300px;
+            padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature i {
+            font-size: 3rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .feature h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature p {
+            color: #666;
+        }
+
+        .equipment-showcase {
+            padding: 4rem 2rem;
+            background-color: #f9f9f9;
+        }
+
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .equipment-item {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .equipment-item:hover {
             transform: translateY(-5px);
         }
 
-        .product-item img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-item h3 {
-            font-size: 24px;
-            margin-top: 15px;
-        }
-
-        .product-item p {
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        /* Testimonials Section */
-        .testimonials {
-            background-color: #f2f2f2;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .testimonial-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .testimonial-item {
-            max-width: 400px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .testimonial-item blockquote {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .testimonial-item p {
-            font-size: 16px;
-            font-style: italic;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .service-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .service-item {
-            max-width: 300px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .service-item h3 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .service-item p {
-            font-size: 16px;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            position: absolute;
+        .equipment-item img {
             width: 100%;
-            bottom: 0;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .equipment-info {
+            padding: 1rem;
+        }
+
+        .equipment-info h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .equipment-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-left: 1rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ff6b6b;
+        }
+
+        .social-icons {
+            display: flex;
+        }
+
+        .social-icons a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #ff6b6b;
         }
     </style>
 </head>
 <body>
-
-<header>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="home.php">Fitness Overload</a>
+    <header class="navbar">
+        <div class="navbar-content">
+            <div class="logo">
+                <a href="index.php">Fitness Overload</a>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="products.php">Products</a></li>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="contact.php">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <a href="logout.php" class="logout-btn">Logout</a>
+            </div>
         </div>
-        <ul class="nav-menu">
-            <li><a href="home.php">Home</a></li>
-            <li class="dropdown">
-                <a href="#">Equipment <i class="fas fa-angle-down"></i></a>
-                <div class="dropdown-content">
-                    <a href="cardio.php">Cardio</a>
-                    <a href="strength.php">Strength Training</a>
-                    <a href="functional.php">Functional Training</a>
-                    <a href="accessories.php">Accessories</a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to Fitness Overload, <?php echo htmlspecialchars($_SESSION['name']); ?>!</h1>
+
+            <p>Discover premium gym equipment to power your workouts and achieve your goals</p>
+            <a href="products.php" class="cta-button">Explore Equipment</a>
+        </section>
+
+        <section class="features">
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Premium Quality</h2>
+                <p>Top-tier materials and craftsmanship for lasting durability.</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-truck"></i>
+                <h2>Fast Shipping</h2>
+                <p>Quick delivery to get you started on your fitness journey ASAP.</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-headset"></i>
+                <h2>Expert Support</h2>
+                <p>Knowledgeable team ready to assist with your equipment needs.</p>
+            </div>
+        </section>
+
+        <section class="equipment-showcase">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Featured Equipment</h2>
+            <div class="equipment-grid">
+                <div class="equipment-item">
+                    <img src="https://pngimg.com/d/treadmill_PNG114.png" alt="Treadmill">
+                    <div class="equipment-info">
+                        <h3>Pro Runner Treadmill</h3>
+                        <p>High-performance treadmill with advanced features for all fitness levels.</p>
+                    </div>
                 </div>
-            </li>
-        </ul>
-        <div class="user-actions">
-            <a href="logout.php" class="logout-btn">Logout</a>
-        </div>
-    </nav>
-</header>
-
-<main>
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Hello <?php echo htmlspecialchars($_SESSION['name']); ?>, Welcome to Fitness Overload!</h1>
-            <p>Explore our wide range of gym equipment.</p>
-        </div>
-    </section>
-
-    <section class="featured-products">
-        <div class="container">
-            <h2>Featured Products</h2>
-            <div class="product-grid">
-                <?php foreach ($featuredProducts as $product): ?>
-                    <div class="product-item">
-                        <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
-                        <h3><?php echo $product['name']; ?></h3>
-                        <p><?php echo $product['description']; ?></p>
-                        <p>$<?php echo $product['price']; ?></p>
-                        <!-- <a href="#" class="btn">Add to Cart</a> -->
+                <div class="equipment-item">
+                    <img src="https://t4.ftcdn.net/jpg/06/54/34/49/360_F_654344994_q7YLNLvHbSCzKvr5G5M96rMPwFkeFgZY.jpg" alt="Dumbbells">
+                    <div class="equipment-info">
+                        <h3>Adjustable Dumbbells Set</h3>
+                        <p>Versatile weight set for strength training and muscle building.</p>
                     </div>
-                <?php endforeach; ?>
+                </div>
+                <div class="equipment-item">
+                    <img src="https://www.jbsports.com.ph/__resources/webdata/images/products/327.jpg" alt="Exercise Bike">
+                    <div class="equipment-info">
+                        <h3>Spin Master Exercise Bike</h3>
+                        <p>Indoor cycling bike for intense cardio workouts and endurance training.</p>
+                    </div>
+                </div>
+                <div class="equipment-item">
+                    <img src="https://gym-mikolo.com/cdn/shop/files/mikolo-power-rack-k6-b-1.png?v=1712113702&width=2000" alt="Power Rack">
+                    <div class="equipment-info">
+                        <h3>Ultimate Power Rack</h3>
+                        <p>Comprehensive strength training station for serious lifters.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Fitness Overload Equipment. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="privacy.php">Privacy Policy</a></li>
+                <li><a href="terms.php">Terms of Service</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <div class="container">
-            <h2>Testimonials</h2>
-            <div class="testimonial-grid">
-                <?php foreach ($testimonials as $testimonial): ?>
-                    <div class="testimonial-item">
-                        <blockquote><?php echo $testimonial['content']; ?></blockquote>
-                        <p>- <?php echo $testimonial['name']; ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <div class="service-grid">
-                <?php foreach ($services as $service): ?>
-                    <div class="service-item">
-                        <h3><?php echo $service['title']; ?></h3>
-                        <p><?php echo $service['description']; ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-</main>
-
-<footer>
-    <p>&copy; 2024 Fitness Overload. All rights reserved.</p>
-</footer>
-
+    </footer>
 </body>
 </html>
